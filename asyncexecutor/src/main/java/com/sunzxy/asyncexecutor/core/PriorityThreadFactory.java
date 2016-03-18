@@ -1,7 +1,6 @@
 package com.sunzxy.asyncexecutor.core;
 
 import android.os.Process;
-import android.support.annotation.NonNull;
 
 import java.util.concurrent.ThreadFactory;
 
@@ -11,7 +10,7 @@ import java.util.concurrent.ThreadFactory;
 public class PriorityThreadFactory implements ThreadFactory {
 
     @Override
-    public Thread newThread(@NonNull final Runnable runnable) {
+    public Thread newThread(final Runnable runnable) {
         Runnable wrapper = new Runnable() {
             @Override
             public void run() {
