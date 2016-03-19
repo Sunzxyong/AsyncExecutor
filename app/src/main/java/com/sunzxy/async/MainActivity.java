@@ -1,7 +1,6 @@
 package com.sunzxy.async;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         final TextView textView = (TextView) findViewById(R.id.tv);
         mFuture = AsyncExecutor.post(new MyAsync(this, textView), new MyCallback(this, textView));
         AsyncExecutor.post(new AsyncCallable<Object, String>() {
