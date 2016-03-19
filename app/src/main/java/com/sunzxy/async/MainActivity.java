@@ -1,10 +1,11 @@
 package com.sunzxy.async;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.sunzxy.asyncexecutor.AsyncExecutor;
@@ -15,30 +16,41 @@ import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity {
     Future<?> mFuture;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         final TextView textView = (TextView) findViewById(R.id.tv);
+        mFuture = AsyncExecutor.post(new MyAsync(this, textView), new MyCallback(this, textView));
+        AsyncExecutor.post(new AsyncCallable<Object, String>() {
+            @Override
+            protected String run() {
+                //compute
+                return null;
+            }
+        }, new UICallback<Object, String>() {
+            @Override
+            protected void onResult(String s) {
 
-        mFuture = AsyncExecutor.post(new MyAsync(this,textView), new MyCallback(this,textView));
-//        AsyncExecutor.postAtFront(new AsyncCallable<TextView, String>(this, textView) {
-//            @Override
-//            public String run() {
-//                try {
-//                    Thread.sleep(3000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                return "hahhahha";
-//            }
-//        }, new UICallback<TextView, String>(textView) {
-//            @Override
-//            public void onResult(String s) {
-//                getParams().get(0).setText(s);
-//            }
-//        });
+            }
+        });
+
+        AsyncExecutor.postAtFront(new AsyncCallable<TextView, String>(this, textView) {
+            @Override
+            public String run() {
+                //The calculated results and return
+                return "";
+            }
+        }, new UICallback<TextView, String>(textView) {
+            @Override
+            public void onResult(String s) {
+                TextView tv = getParams().get(0);
+                if (tv != null && !TextUtils.isEmpty(s))
+                    tv.setText(s);
+            }
+        });
     }
 
     static class MyAsync extends AsyncCallable<TextView, String> {
@@ -52,9 +64,8 @@ public class MainActivity extends AppCompatActivity {
             SystemClock.sleep(8000);
             Context ctx = getContext();
             TextView textView = getParams().get(0);
-            Log.e("zxy", "ctx+===" + ctx );
-            Log.e("zxy", "textView+===" + textView );
-            return "aaa";
+            //...
+            return "";
         }
 
     }
@@ -68,10 +79,8 @@ public class MainActivity extends AppCompatActivity {
         public void onResult(String s) {
             Context ctx = getContext();
             TextView textView = getParams().get(0);
-            if(textView != null)
-            textView.setText(s);
-            Log.e("zxy", "Call:ctx+===" + ctx );
-            Log.e("zxy", "Call:textView+===" + textView );
+            if (textView != null)
+                textView.setText(s);
         }
     }
 
