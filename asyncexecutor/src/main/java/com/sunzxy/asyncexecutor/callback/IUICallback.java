@@ -3,10 +3,10 @@ package com.sunzxy.asyncexecutor.callback;
 /**
  * Created by zhengxiaoyong on 16/3/15.
  */
-public interface IUICallback<Param, Result> {
+public interface IUICallback<P, R> {
 
     /**
-     * @param result  The computes result.Nullable
+     * @param r  The computes result.Nullable
      */
-    void onCallback(Result result);
+    void onCallback(R r);
 }

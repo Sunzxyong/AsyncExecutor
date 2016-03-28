@@ -22,6 +22,9 @@ public class PriorityThreadFactory implements ThreadFactory {
                 runnable.run();
             }
         };
-        return new Thread(wrapper,"AsyncExecutorThread");
+        Thread thread = new Thread(wrapper, "AsyncExecutorThread");
+        if (thread.isDaemon())
+            thread.setDaemon(false);
+        return thread;
     }
 }

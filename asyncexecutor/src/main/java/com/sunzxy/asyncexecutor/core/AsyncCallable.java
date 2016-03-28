@@ -8,8 +8,8 @@ import java.util.concurrent.Callable;
 /**
  * Created by zhengxiaoyong on 16/3/14.
  */
-public abstract class AsyncCallable<Param, Result> implements Callable<Result> {
-    private AsyncRefManager<Param> mAsyncRefManager;
+public abstract class AsyncCallable<P, R> implements Callable<R> {
+    private AsyncRefManager<P> mAsyncRefManager;
 
     {
         mAsyncRefManager = new AsyncRefManager<>();
@@ -23,27 +23,27 @@ public abstract class AsyncCallable<Param, Result> implements Callable<Result> {
     }
 
     @SafeVarargs
-    public AsyncCallable(Param... params) {
-        mAsyncRefManager.attachReference(null, params);
+    public AsyncCallable(P... ps) {
+        mAsyncRefManager.attachReference(null, ps);
     }
 
     @SafeVarargs
-    public AsyncCallable(Context context, Param... params) {
-        mAsyncRefManager.attachReference(context, params);
+    public AsyncCallable(Context context, P... ps) {
+        mAsyncRefManager.attachReference(context, ps);
     }
 
     @Override
-    public Result call() throws Exception {
+    public R call() throws Exception {
         return run();
     }
 
-    protected abstract Result run();
+    protected abstract R run();
 
     protected Context getContext() {
         return mAsyncRefManager.getContext();
     }
 
-    protected List<Param> getParams() {
+    protected List<P> getParams() {
         return mAsyncRefManager.getParams();
     }
 

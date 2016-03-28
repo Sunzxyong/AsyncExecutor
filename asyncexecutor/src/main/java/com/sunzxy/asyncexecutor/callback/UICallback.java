@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Created by zhengxiaoyong on 16/3/17.
  */
-public abstract class UICallback<Param, Result> implements IUICallback<Param, Result> {
-    private AsyncRefManager<Param> mAsyncRefManager;
+public abstract class UICallback<P, R> implements IUICallback<P, R> {
+    private AsyncRefManager<P> mAsyncRefManager;
 
     {
         mAsyncRefManager = new AsyncRefManager<>();
@@ -24,27 +24,27 @@ public abstract class UICallback<Param, Result> implements IUICallback<Param, Re
     }
 
     @SafeVarargs
-    public UICallback(Param... params) {
-        mAsyncRefManager.attachReference(null,params);
+    public UICallback(P... ps) {
+        mAsyncRefManager.attachReference(null, ps);
     }
 
     @SafeVarargs
-    public UICallback(Context context, Param... params) {
-        mAsyncRefManager.attachReference(context,params);
+    public UICallback(Context context, P... ps) {
+        mAsyncRefManager.attachReference(context, ps);
     }
 
     @Override
-    public void onCallback(Result result) {
-        onResult(result);
+    public void onCallback(R r) {
+        onResult(r);
     }
 
-    protected abstract void onResult(Result result);
+    protected abstract void onResult(R r);
 
     protected Context getContext() {
         return mAsyncRefManager.getContext();
     }
 
-    protected List<Param> getParams() {
+    protected List<P> getParams() {
         return mAsyncRefManager.getParams();
     }
 }

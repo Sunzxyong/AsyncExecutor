@@ -11,9 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by zhengxiaoyong on 16/3/18.
  */
-public class AsyncRefManager<Param> {
+public class AsyncRefManager<P> {
+
     private WeakReference<Context> mContextRef;
-    private SparseArray<WeakReference<Param>> mParamsRef;
+
+    private SparseArray<WeakReference<P>> mParamsRef;
+
     private AtomicInteger mAtomicInteger;
 
     {
@@ -22,15 +25,15 @@ public class AsyncRefManager<Param> {
     }
 
     @SafeVarargs
-    public final void attachReference(Context context, Param... params) {
+    public final void attachReference(Context context, P... ps) {
         if (context != null)
             mContextRef = new WeakReference<Context>(context);
-        if (params != null && params.length != 0) {
-            int length = params.length;
-            WeakReference<Param> weakRef;
+        if (ps != null && ps.length != 0) {
+            int length = ps.length;
+            WeakReference<P> weakRef;
             mParamsRef.clear();
             for (int i = 0; i < length; i++) {
-                weakRef = new WeakReference<Param>(params[i]);
+                weakRef = new WeakReference<P>(ps[i]);
                 mParamsRef.put(mAtomicInteger.getAndIncrement(), weakRef);
             }
         }
@@ -48,14 +51,14 @@ public class AsyncRefManager<Param> {
         return mContextRef.get();
     }
 
-    public List<Param> getParams() {
+    public List<P> getParams() {
         if (mParamsRef == null)
             return new ArrayList<>();
         int size = mParamsRef.size();
-        List<Param> params = new ArrayList<>(size);
+        List<P> ps = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            params.add(mParamsRef.get(i).get());
+            ps.add(mParamsRef.get(i).get());
         }
-        return params;
+        return ps;
     }
 }

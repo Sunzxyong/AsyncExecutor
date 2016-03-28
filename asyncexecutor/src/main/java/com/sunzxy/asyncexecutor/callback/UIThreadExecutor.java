@@ -10,13 +10,13 @@ public class UIThreadExecutor {
 
     private static Handler mHandler;
 
-    public static <Param, Result> void postToUIThread(final Result result, final IUICallback<Param, Result> uiCallback) {
+    public static <P, R> void postToUIThread(final R r, final IUICallback<P, R> uiCallback) {
         enableUIThread();
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 if (uiCallback != null)
-                    uiCallback.onCallback(result);
+                    uiCallback.onCallback(r);
             }
         });
     }
