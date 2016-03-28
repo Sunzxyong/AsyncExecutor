@@ -31,7 +31,9 @@ public class AsyncExecutor {
         }
         return mExecutor.submit(new AsyncFutureTask<P, R>(runnable, uiCallback));
     }
-
+    public static <P, R> Future<?> post(AsyncCallable<P, R> runnable,IUICallback<P, R> uiCallback) {
+        return post(runnable, uiCallback, false);
+    }
     public static <P, R> Future<?> post(AsyncCallable<P, R> runnable) {
         return post(runnable, null, false);
     }
@@ -57,6 +59,9 @@ public class AsyncExecutor {
         AsyncFutureTask<P, R> task = new AsyncFutureTask<P, R>(runnable, uiCallback);
         task.setPriority(AsyncFutureTask.HIGH_PRIORITY);
         return mExecutor.submit(task);
+    }
+    public static <P, R> Future<?> postAtFront(AsyncCallable<P, R> runnable, IUICallback<P, R> uiCallback) {
+        return postAtFront(runnable,uiCallback,false);
     }
 
 }
